@@ -9,17 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
+      - name: Install Newman
+        run: npm install -g newman
 
-      - name: Install Postman CLI
-        run: npm install -g @postman/cli
-
-      - name: Login to Postman
-        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-
-      - name: Run Collection
-        run: postman collection run 47182651-9d3fc9bc-db8f-43c4-89dc-7f80f074c879
+      - name: Run Postman Collection
+        run: |
+          newman run "https://api.getpostman.com/collections/47182651-9d3fc9bc-db8f-43c4-89dc-7f80f074c879?apikey=${{ secrets.POSTMAN_API_KEY }}"
