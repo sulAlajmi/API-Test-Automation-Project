@@ -1,24 +1,25 @@
-name: Postman API Tests
+name: Postman CI
 
 on:
   push:
   workflow_dispatch:
 
 jobs:
-  newman-run:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Install Postman CLI
+        run: npm install -g @postman/cli
 
-      - name: Run Postman Collection
-        run: newman run collection.json
+      - name: Login to Postman
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+
+      - name: Run Collection
+        run: postman collection run 47182651-9d3fc9bc-db8f-43c4-89dc-7f80f074c879
